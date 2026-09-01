@@ -27,12 +27,10 @@ function AuthPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("handleSubmit called, isLogin:", isLogin);
     setLoading(true);
 
     try {
       if (isLogin) {
-        console.log("attempting login");
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -40,7 +38,6 @@ function AuthPage() {
         if (error) throw error;
         navigate({ to: "/todos", replace: true });
       } else {
-        console.log("attempting signup");
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -48,7 +45,6 @@ function AuthPage() {
             emailRedirectTo: window.location.origin,
           },
         });
-        console.log("signup result:", { hasSession: !!data.session, error: error?.message });
         if (error) throw error;
         if (data.session) {
           navigate({ to: "/todos", replace: true });
@@ -57,7 +53,6 @@ function AuthPage() {
         toast.success("회원가입 이메일을 확인해주세요.");
       }
     } catch (error) {
-      console.log("auth error:", error);
       toast.error(error instanceof Error ? error.message : "오류가 발생했습니다.");
     } finally {
       setLoading(false);
