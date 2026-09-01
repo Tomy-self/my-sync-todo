@@ -50,7 +50,11 @@ export const updateTodo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .validator((input) => updateTodoSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const update: Record<string, unknown> = {
+    const update: {
+      title?: string;
+      completed?: boolean;
+      updated_at: string;
+    } = {
       updated_at: new Date().toISOString(),
     };
     if (data.title !== undefined) update.title = data.title;

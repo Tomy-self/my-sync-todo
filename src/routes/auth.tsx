@@ -38,7 +38,7 @@ function AuthPage() {
         if (error) throw error;
         navigate({ to: "/todos", replace: true });
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -46,6 +46,10 @@ function AuthPage() {
           },
         });
         if (error) throw error;
+        if (data.session) {
+          navigate({ to: "/todos", replace: true });
+          return;
+        }
         toast.success("회원가입 이메일을 확인해주세요.");
       }
     } catch (error) {
