@@ -31,7 +31,7 @@ export const getTodos = createServerFn({ method: "GET" })
 
 export const createTodo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => createTodoSchema.parse(input))
+  .validator((input) => createTodoSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { data: todo, error } = await context.supabase
       .from("todos")
@@ -48,7 +48,7 @@ export const createTodo = createServerFn({ method: "POST" })
 
 export const updateTodo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => updateTodoSchema.parse(input))
+  .validator((input) => updateTodoSchema.parse(input))
   .handler(async ({ data, context }) => {
     const update: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
@@ -70,7 +70,7 @@ export const updateTodo = createServerFn({ method: "POST" })
 
 export const deleteTodo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => deleteTodoSchema.parse(input))
+  .validator((input) => deleteTodoSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("todos")
